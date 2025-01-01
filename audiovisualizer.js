@@ -27,11 +27,11 @@ container.addEventListener("click", function(){
         audioSource.connect(analyser);
         analyser.connect(audioctx.destination)
     }
-    analyser.fftSize = 64;
+    analyser.fftSize = 512;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const barWidth = (canvas.width/2)/bufferLength;
+    const barWidth = 5;
     let barHeight;
     let x;
 
@@ -60,11 +60,11 @@ file.addEventListener("change", function(){
         audioSource.connect(analyser);
         analyser.connect(audioctx.destination)
     }
-    analyser.fftSize = 64;
+    analyser.fftSize = 512;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const barWidth = (canvas.width/2)/bufferLength;
+    const barWidth = 5;
     let barHeight;
     let x;
 
@@ -80,26 +80,73 @@ file.addEventListener("change", function(){
 
 function drawVisualiser(bufferLength, x, barWidth, barHeight, dataArray){
     for (let i = 0; i < bufferLength; i++){
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.rotate(i * Math.PI *2 / bufferLength);
         barHeight = dataArray[i]*2;
-        const red = barWidth*barHeight/50;
-        const green = 50;
-        const blue = i * barHeight/20
+        const hue = i*2;
         ctx.fillStyle = "purple";
-        ctx.fillRect(canvas.width/2 - x, canvas.height - barHeight - 30, barWidth, 15);
-        ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
-        ctx.fillRect(canvas.width/2 - x, canvas.height - barHeight, barWidth, barHeight);
+        ctx.fillRect(0, 30, barWidth, barHeight/3);
+        ctx.fillStyle = "hsl(" + hue + ",100%, 50%)";
+        ctx.fillRect(0, 0, barWidth, barHeight);
+        ctx.fillRect(0, barHeight+10, 10,10);
+        ctx.strokeStyle = "white";
+        ctx.stroke();
         x += barWidth;
+        ctx.restore();
     }
+
     for (let i = 0; i < bufferLength; i++){
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.rotate(i * Math.PI *2 / bufferLength +Math.PI/2);
         barHeight = dataArray[i]*2;
-        const red = barWidth*barHeight/50;
+        const red = barWidth*barHeight/20;
         const green = 50;
         const blue = i * barHeight/20
         ctx.fillStyle = "orange";
-        ctx.fillRect(x, canvas.height - barHeight - 30, barWidth, 15);
+        ctx.fillRect(0, 30, barWidth, barHeight/2);
         ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        ctx.fillRect(0, 0, barWidth, barHeight);
+        ctx.fillRect(0, barHeight+10, 10,10);
+        ctx.strokeStyle = "white";
+        ctx.stroke();
         x += barWidth;
+        ctx.restore();
+    }
+    for (let i = 0; i < bufferLength; i++){
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.rotate(i * Math.PI *2 / bufferLength + Math.PI);
+        barHeight = dataArray[i]*2;
+        const hue = i*2+100;
+        ctx.fillStyle = "purple";
+        ctx.fillRect(0, 30, barWidth, barHeight/3);
+        ctx.fillStyle = "hsl(" + hue + ",100%, 50%)";
+        ctx.fillRect(0, 0, barWidth, barHeight);
+        ctx.fillRect(0, barHeight+10, 10,10);
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+        x += barWidth;
+        ctx.restore();
+    }
+    for (let i = 0; i < bufferLength; i++){
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.rotate(i * Math.PI *2 / bufferLength + 3*Math.PI/2);
+        barHeight = dataArray[i]*2;
+        const red = barWidth*barHeight/20;
+        const green = 50;
+        const blue = i * barHeight/20
+        ctx.fillStyle = "purple";
+        ctx.fillRect(0, 30, barWidth, barHeight/3);
+        ctx.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
+        ctx.fillRect(0, 0, barWidth, barHeight);
+        ctx.fillRect(0, barHeight+10, 10,10);
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+        x += barWidth;
+        ctx.restore();
     }
 }
 
